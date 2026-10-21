@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LurkGo – Privacy Policy</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; background: #08070b; color: #e8e2d6; font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: 1px; }
+  h2 { font-size: 19px; margin: 32px 0 8px; color: #ffb43a; }
+  h3 { font-size: 16px; margin: 20px 0 4px; }
+  p, li { color: #d6cfc2; }
+  a { color: #7fd4ff; }
+  .muted { color: #8a8070; font-size: 14px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 8px 0; }
+  th, td { text-align: left; vertical-align: top; padding: 8px; border-bottom: 1px solid #2a2630; }
+  th { color: #fff; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+<h1>LurkGo – Privacy Policy</h1>
+<p class="muted">Effective date: 21 October 2026</p>
+
+<p>LurkGo is a location-based augmented-reality game for Android. You walk around outside and
+see creatures placed at real places near you through your phone's camera. This policy explains
+what data the app uses, where it goes and what choices you have.</p>
+
+<p><strong>In short:</strong> LurkGo has no user accounts, no advertising, no analytics and no
+server of its own. The developer does not receive, collect or store any of your personal data.
+Your camera image, location and sensor readings are processed on your phone. To show the map and
+to place creatures safely, the app downloads public map data from OpenStreetMap services, which
+see the approximate area you are in.</p>
+
+<h2>1. Who is responsible</h2>
+<p>LurkGo is developed and published by Mikhail Gubko, an individual developer based in Germany.
+Contact: <a href="mailto:mgoubko@gmail.com">mgoubko@gmail.com</a>.</p>
+
+<h2>2. Data the app uses</h2>
+
+<h3>Camera</h3>
+<p>The camera shows the live view behind the creatures. Camera frames are processed only on your
+device, for example to keep the creatures steady while you move. They are never stored or sent
+anywhere, except screenshots you take yourself (see below).</p>
+
+<h3>Precise and approximate location</h3>
+<p>Your location places the creatures around you, shows you on the map and tells walking apart
+from riding (creatures hide while you are in a vehicle). Your location is processed on your
+device and is not stored by the app beyond the current session. It is never sent to the
+developer. It does, however, determine which map data the app requests from third parties (see
+section 3).</p>
+
+<h3>Motion sensors and physical activity</h3>
+<p>The accelerometer, gyroscope, compass and step detector (Android "physical activity"
+permission) are used on your device to know where the phone is pointing and to count your steps
+while you walk. These readings are not stored or sent anywhere. The app contains an optional
+sensor recording tool for testing; it only runs when you start it and saves its file in the
+app's own folder on your phone.</p>
+
+<h3>Screenshots</h3>
+<p>When you tap the camera button, the app saves a screenshot to your phone's photo gallery.
+Whether you share it, and with whom, is entirely up to you and happens through Android, not
+through LurkGo.</p>
+
+<h3>Your own 3D models (optional)</h3>
+<p>You can add your own 3D models from a file on your phone, from a direct link, or from
+<a href="https://sketchfab.com">Sketchfab</a>. For Sketchfab you enter your personal Sketchfab
+API token. The token is stored only on your phone and is sent only to Sketchfab, to download the
+model you chose. Downloaded models are stored only on your phone.</p>
+
+<h3>Data stored on your phone</h3>
+<p>The app keeps the following on your device: your chosen world, sensor calibration values,
+your star score, your own models and your Sketchfab token (if you entered one), and a cache of
+map data for up to 7 days. Uninstalling the app or clearing its data in Android settings deletes
+all of it.</p>
+
+<h3>Backup of your star score</h3>
+<p>Your star score may be included in Android's automatic backup to your Google account, so it
+survives a reinstall or a new phone. This backup is run by Google under your device's backup
+settings and Google's privacy policy; the developer has no access to it. No other app data is
+backed up.</p>
+
+<h2>3. Third parties the app talks to</h2>
+<p>Like any internet request, each request below reveals your device's IP address to the server
+that answers it. LurkGo does not send your name, account, device ID or any other identifier.</p>
+<div class="wrap">
+<table>
+<tr><th>Service</th><th>What it receives</th><th>Why</th><th>Its privacy policy</th></tr>
+<tr><td>OpenStreetMap tile servers (tile.openstreetmap.org)</td>
+    <td>Requests for map images of the area you are viewing</td>
+    <td>Showing the map</td>
+    <td><a href="https://osmfoundation.org/wiki/Privacy_Policy">OSMF Privacy Policy</a></td></tr>
+<tr><td>Overpass API servers (overpass-api.de, overpass.kumi.systems, overpass.private.coffee)</td>
+    <td>A query for public map data (paths, roads, parks) in a box of a few hundred metres around you</td>
+    <td>Placing creatures only on safe, public places such as sidewalks and parks</td>
+    <td><a href="https://overpass-api.de/">overpass-api.de</a>,
+        <a href="https://overpass.kumi.systems/">overpass.kumi.systems</a>,
+        <a href="https://overpass.private.coffee/">overpass.private.coffee</a></td></tr>
+<tr><td>Sketchfab (only if you use it)</td>
+    <td>Your Sketchfab API token and the model you chose</td>
+    <td>Downloading your own model</td>
+    <td><a href="https://sketchfab.com/privacy">Sketchfab Privacy Policy</a></td></tr>
+<tr><td>Any website you link a model from (only if you use it)</td>
+    <td>The download request for that file</td>
+    <td>Downloading your own model</td>
+    <td>That website's own policy</td></tr>
+<tr><td>Google (Android Auto Backup, only if enabled on your phone)</td>
+    <td>Your star score</td>
+    <td>Restoring your score on a new install</td>
+    <td><a href="https://policies.google.com/privacy">Google Privacy Policy</a></td></tr>
+</table>
+</div>
+<p>The developer does not sell, rent or share your data with anyone, and does not use it for
+advertising or profiling.</p>
+
+<h2>4. Android permissions</h2>
+<ul>
+  <li><strong>Camera</strong> – the live augmented-reality view.</li>
+  <li><strong>Precise and approximate location</strong> – placing creatures around you and the map. Only while the app is open; no background location.</li>
+  <li><strong>Physical activity</strong> – the step detector.</li>
+  <li><strong>Internet</strong> – map data and optional model downloads.</li>
+  <li><strong>Storage</strong> (Android 9 and older only) – saving screenshots to the gallery.</li>
+</ul>
+<p>You can withdraw any permission at any time in Android settings. Without the camera or
+location the game cannot work.</p>
+
+<h2>5. Legal basis and your rights (GDPR)</h2>
+<p>Because the developer does not receive your personal data, there is nothing on the
+developer's side to access, correct or delete. Processing on your device and the requests to the
+map services happen because you use the game (Art. 6(1)(b) GDPR) and in the legitimate interest
+of placing creatures safely (Art. 6(1)(f) GDPR). You have the right to access, rectification,
+erasure, restriction, data portability and objection, and you can contact the developer with any
+question at the address above. You also have the right to lodge a complaint with a data
+protection authority, for example the Bavarian Data Protection Authority (BayLDA).</p>
+
+<h2>6. Safety</h2>
+<p>Creatures only appear while you walk. Please always watch your surroundings and traffic while
+playing, and do not enter private property or unsafe places.</p>
+
+<h2>7. Children</h2>
+<p>LurkGo is not directed at children under 13 and does not knowingly process children's
+personal data.</p>
+
+<h2>8. Changes to this policy</h2>
+<p>If the app starts using data differently, this page will be updated and the effective date
+above changed before the new version is released.</p>
+</main>
+</body>
+</html>
