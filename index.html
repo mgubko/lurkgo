@@ -2,10 +2,393 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LurkGo</title>
-<meta http-equiv="refresh" content="0; url=privacy.html">
-<style>body { background: #08070b; color: #e8e2d6; font: 16px system-ui, sans-serif; padding: 32px 16px; } a { color: #7fd4ff; }</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LurkGo – creatures lurking on your street</title>
+<meta name="description" content="LurkGo is an augmented-reality walking game for Android. Pick a world, follow the radar and meet creatures at real places around you. Early access is open – join the test.">
+<meta name="theme-color" content="#050407">
+<link rel="canonical" href="https://lurkgo.app/">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lurkgo.app/">
+<meta property="og:title" content="LurkGo – creatures lurking on your street">
+<meta property="og:description" content="Walk your streets and find AR creatures lurking nearby. Early access on Android.">
+<meta property="og:image" content="https://lurkgo.app/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #050407; --panel: #0e0c12; --line: rgba(255,255,255,0.12);
+    --text: #eee8dc; --soft: #cfc8bc; --muted: #8a8070;
+    --neon: linear-gradient(100deg, #ff8a3d 0%, #ff4fa3 45%, #b45cff 70%, #4fd6ff 100%);
+    --halloween: #ffb43a; --fantasy: #ffcf6a; --anime: #ff8fc8; --otherside: #ff5a4a;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #7fd4ff; }
+  img { max-width: 100%; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  .kicker { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  h2 { font-size: clamp(24px, 4vw, 34px); line-height: 1.2; margin: 0 0 14px; letter-spacing: 1px; }
+  section { padding: 72px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+  .lead { color: var(--soft); max-width: 640px; margin: 0 0 28px; }
+
+  /* Top bar */
+  header.bar { position: sticky; top: 0; z-index: 10; background: rgba(5,4,7,0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+  header.bar .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand .mark { height: 36px; }
+  .brand .word { height: 13px; }
+  nav.links { display: flex; align-items: center; gap: 18px; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; }
+  nav.links a { color: var(--soft); text-decoration: none; }
+  nav.links a:hover { color: #fff; }
+  .lang { display: flex; gap: 2px; border: 1px solid var(--line); border-radius: 16px; padding: 2px; }
+  .lang button { background: none; border: 0; color: var(--muted); font: 600 11px/1 system-ui, sans-serif; letter-spacing: 1px; padding: 6px 8px; border-radius: 12px; cursor: pointer; }
+  .lang button.on { background: rgba(255,255,255,0.12); color: #fff; }
+  @media (max-width: 720px) { nav.links a.opt { display: none; } }
+  @media (max-width: 520px) { .brand .word { display: none; } nav.links { gap: 12px; font-size: 12px; letter-spacing: 1px; } }
+
+  /* Hero */
+  .hero { position: relative; overflow: hidden; padding: 0; border: 0; }
+  .hero-bg { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .hero-bg div { background-size: cover; background-position: center; filter: saturate(1.1); }
+  .hero-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(5,4,7,0.55) 0%, rgba(5,4,7,0.85) 60%, var(--bg) 100%), linear-gradient(to bottom, rgba(5,4,7,0.2), var(--bg) 96%); }
+  @media (max-width: 720px) { .hero-bg { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; } }
+  .hero .wrap { position: relative; text-align: center; padding-top: 72px; padding-bottom: 80px; }
+  .hero .mark { width: clamp(120px, 22vw, 176px); filter: drop-shadow(0 0 28px rgba(255,80,170,0.45)); animation: glow 4s ease-in-out infinite; }
+  .hero .word { display: block; margin: 18px auto 0; width: clamp(200px, 40vw, 340px); }
+  @keyframes glow { 0%,100% { filter: drop-shadow(0 0 22px rgba(255,80,170,0.35)); } 50% { filter: drop-shadow(0 0 40px rgba(80,200,255,0.55)); } }
+  @media (prefers-reduced-motion: reduce) { .hero .mark { animation: none; } html { scroll-behavior: auto; } }
+  .tagline { font-size: clamp(20px, 3.4vw, 28px); line-height: 1.3; margin: 26px auto 8px; max-width: 680px; font-weight: 600; }
+  .sub { color: var(--soft); max-width: 600px; margin: 0 auto 30px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 5px 12px; border-radius: 14px; border: 1px solid rgba(255,120,190,0.6); color: #ffb3dc; background: rgba(255,80,170,0.1); margin-top: 26px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 28px; font-weight: 700; font-size: 15px; letter-spacing: 0.5px; text-decoration: none; cursor: pointer; border: 0; transition: transform .15s, box-shadow .15s; }
+  .btn:active { transform: scale(0.97); }
+  .btn svg { width: 20px; height: 20px; flex: none; }
+  .btn.primary { background: var(--neon); color: #12060f; box-shadow: 0 0 24px rgba(255,80,170,0.35); }
+  .btn.primary:hover { box-shadow: 0 0 34px rgba(255,80,170,0.6); }
+  .btn.ghost { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid rgba(255,255,255,0.22); }
+  .btn.ghost:hover { background: rgba(255,255,255,0.12); }
+  .platform { font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+  /* How it works */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .step { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px 20px; }
+  .step .ico { font-size: 28px; line-height: 1; }
+  .step h3 { margin: 12px 0 6px; font-size: 17px; letter-spacing: 0.5px; }
+  .step p { margin: 0; color: var(--soft); font-size: 15px; }
+
+  /* Worlds */
+  .worlds { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .world { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #111; transition: box-shadow .2s, border-color .2s; }
+  .world img { display: block; width: 100%; aspect-ratio: 840 / 356; object-fit: cover; }
+  .world .label { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 16px 12px; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.82) 55%); }
+  .world b { display: block; font-size: 19px; letter-spacing: 4px; font-weight: 600; text-transform: uppercase; }
+  .world span { font-size: 14px; color: var(--soft); }
+  .world.halloween b { color: var(--halloween); } .world.halloween:hover { box-shadow: 0 0 22px rgba(255,150,40,0.45); border-color: rgba(255,170,60,0.7); }
+  .world.fantasy b { color: var(--fantasy); } .world.fantasy:hover { box-shadow: 0 0 22px rgba(255,200,100,0.45); border-color: rgba(255,210,120,0.7); }
+  .world.anime b { color: var(--anime); } .world.anime:hover { box-shadow: 0 0 22px rgba(255,140,200,0.45); border-color: rgba(255,150,210,0.7); }
+  .world.otherside b { color: var(--otherside); } .world.otherside:hover { box-shadow: 0 0 22px rgba(255,60,50,0.45); border-color: rgba(255,80,60,0.7); }
+  .note { color: var(--muted); font-size: 14px; margin-top: 18px; }
+
+  /* Screenshots */
+  .shots { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 20px 16px; margin: 0 -20px; scrollbar-width: thin; }
+  .shots figure { flex: none; width: min(220px, 56vw); margin: 0; scroll-snap-align: center; }
+  .shots img { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 18px; border: 1px solid var(--line); background: #111; }
+  .shots figcaption { font-size: 13px; color: var(--muted); text-align: center; margin-top: 8px; }
+
+  /* Early access */
+  .join { position: relative; }
+  .join-card { background: linear-gradient(var(--panel), var(--panel)) padding-box, var(--neon) border-box; border: 1.5px solid transparent; border-radius: 22px; padding: clamp(22px, 4vw, 40px); }
+  .join ol { list-style: none; counter-reset: s; padding: 0; margin: 8px 0 28px; display: grid; gap: 16px; }
+  .join li { counter-increment: s; display: grid; grid-template-columns: 38px 1fr; gap: 14px; align-items: start; }
+  .join li::before { content: counter(s); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); }
+  .join li b { display: block; }
+  .join li span { color: var(--soft); font-size: 15px; }
+  .join .ctas { justify-content: flex-start; }
+  .why { margin-top: 26px; padding: 14px 16px; border-radius: 12px; background: rgba(255,180,58,0.07); border: 1px solid rgba(255,180,58,0.25); color: var(--soft); font-size: 15px; }
+  .why b { color: var(--halloween); }
+
+  /* Community */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0 0 10px; color: var(--soft); font-size: 15px; }
+  .card a { font-weight: 600; text-decoration: none; }
+  .soon { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 10px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+
+  /* Safety + footer */
+  .safety { display: flex; gap: 16px; align-items: flex-start; background: rgba(255,90,74,0.06); border: 1px solid rgba(255,90,74,0.28); border-radius: 16px; padding: 18px 20px; }
+  .safety .ico { font-size: 26px; line-height: 1.2; }
+  .safety p { margin: 0; color: var(--soft); }
+  footer { padding: 36px 0 48px; border-top: 1px solid rgba(255,255,255,0.06); color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; justify-content: space-between; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  footer a { color: var(--soft); text-decoration: none; }
+  footer a:hover { color: #fff; }
+</style>
 </head>
-<body><p><a href="privacy.html">LurkGo – Privacy Policy</a></p></body>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="LurkGo">
+      <img class="mark" src="assets/lurkgo-mark.png" alt="">
+      <img class="word" src="assets/lurkgo-wordmark.png" alt="LurkGo">
+    </a>
+    <nav class="links">
+      <a class="opt" href="#worlds" data-i18n="navWorlds">Worlds</a>
+      <a class="opt" href="#community" data-i18n="navCommunity">Community</a>
+      <a href="#join" data-i18n="navJoin">Join the test</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="de">DE</button>
+        <button type="button" data-lang="ru">RU</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div style="background-image:url(assets/worlds/halloween.jpg)"></div>
+    <div style="background-image:url(assets/worlds/fantasy.jpg)"></div>
+    <div style="background-image:url(assets/worlds/anime.jpg)"></div>
+    <div style="background-image:url(assets/worlds/otherside.jpg)"></div>
+  </div>
+  <div class="wrap">
+    <img class="mark" src="assets/lurkgo-mark.png" alt="">
+    <img class="word" src="assets/lurkgo-wordmark.png" alt="LurkGo">
+    <div class="badge" data-i18n="badge">Early access · Android</div>
+    <p class="tagline" data-i18n="tagline">Walk your streets and find creatures lurking around the corner.</p>
+    <p class="sub" data-i18n="sub">An augmented-reality walking game. Pick a world, follow the radar and meet its creatures at real places near you, right through your phone camera.</p>
+    <div class="ctas">
+      <a class="btn primary" href="#join">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8 1 .6l15.6-9.2c.4-.3.4-.9 0-1.2L5 2.2c-.5-.2-1 .1-1 .6z"/></svg>
+        <span data-i18n="ctaJoin">Join early access</span>
+      </a>
+      <a class="btn ghost" href="#worlds" data-i18n="ctaWorlds">See the worlds</a>
+    </div>
+    <p class="platform" data-i18n="platform">Free · no account · no ads</p>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <p class="kicker" data-i18n="howKicker">How it works</p>
+    <h2 data-i18n="howTitle">Your neighbourhood is the game board</h2>
+    <div class="steps">
+      <div class="step"><div class="ico">🌍</div><h3 data-i18n="s1t">Choose a world</h3><p data-i18n="s1p">Halloween, Fantasy, Anime or The Other Side. Each has its own creatures, colours and music.</p></div>
+      <div class="step"><div class="ico">📡</div><h3 data-i18n="s2t">Follow the radar</h3><p data-i18n="s2p">The map shows who is lurking nearby. Walk towards them on foot – they hide while you ride.</p></div>
+      <div class="step"><div class="ico">👁️</div><h3 data-i18n="s3t">Meet them in AR</h3><p data-i18n="s3p">Raise your phone and see them standing on your street. Tap a creature to collect a star.</p></div>
+      <div class="step"><div class="ico">👥</div><h3 data-i18n="s4t">Hunt together</h3><p data-i18n="s4p">Everyone nearby sees the same creatures in the same places. Go out with friends.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="worlds">
+  <div class="wrap">
+    <p class="kicker" data-i18n="worldsKicker">Worlds</p>
+    <h2 data-i18n="worldsTitle">Pick your world every time you go out</h2>
+    <p class="lead" data-i18n="worldsLead">Each world recolours the camera image with its own look and fills your streets with its own cast.</p>
+    <div class="worlds">
+      <div class="world halloween"><img src="assets/worlds/halloween.jpg" alt="" loading="lazy"><div class="label"><b>Halloween</b><span data-i18n="wHalloween">Golden dusk, glowing pumpkins, bats and restless spirits</span></div></div>
+      <div class="world fantasy"><img src="assets/worlds/fantasy.jpg" alt="" loading="lazy"><div class="label"><b data-i18n="nFantasy">Fantasy</b><span data-i18n="wFantasy">A warm fairy-tale autumn of elves, dwarves, leprechauns and trolls</span></div></div>
+      <div class="world anime"><img src="assets/worlds/anime.jpg" alt="" loading="lazy"><div class="label"><b data-i18n="nAnime">Anime</b><span data-i18n="wAnime">A cel-shaded world of heroes, ninjas and cute critters</span></div></div>
+      <div class="world otherside"><img src="assets/worlds/otherside.jpg" alt="" loading="lazy"><div class="label"><b data-i18n="nOtherside">The Other Side</b><span data-i18n="wOtherside">A cold blue world under a burning red sky</span></div></div>
+    </div>
+    <p class="note" data-i18n="ownModels">🧩 Bring your own monsters: load any downloadable 3D model from Sketchfab and meet it at the next corner.</p>
+  </div>
+</section>
+
+<section id="shots">
+  <div class="wrap">
+    <p class="kicker" data-i18n="shotsKicker">From the street</p>
+    <h2 data-i18n="shotsTitle">Real streets, unreal neighbours</h2>
+    <div class="shots">
+      <figure><img src="assets/shots/walker.jpg" alt="" loading="lazy"><figcaption data-i18n="c1">Something tall at the end of the road</figcaption></figure>
+      <figure><img src="assets/shots/radar.jpg" alt="" loading="lazy"><figcaption data-i18n="c2">The radar shows who is near</figcaption></figure>
+      <figure><img src="assets/shots/pumpkins.jpg" alt="" loading="lazy"><figcaption data-i18n="c3">Pumpkins on the pavement</figcaption></figure>
+      <figure><img src="assets/shots/worlds.jpg" alt="" loading="lazy"><figcaption data-i18n="c4">Four worlds to choose from</figcaption></figure>
+      <figure><img src="assets/shots/graves.jpg" alt="" loading="lazy"><figcaption data-i18n="c5">A graveyard where there was none</figcaption></figure>
+      <figure><img src="assets/shots/cauldron.jpg" alt="" loading="lazy"><figcaption data-i18n="c6">Who left this cauldron here?</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="join" class="join">
+  <div class="wrap">
+    <div class="join-card">
+      <p class="kicker" data-i18n="joinKicker">Early access</p>
+      <h2 data-i18n="joinTitle">Join the test on Google Play</h2>
+      <p class="lead" data-i18n="joinLead">LurkGo is in closed testing on Google Play. Testers get every update first and help decide what comes next.</p>
+      <ol>
+        <li><div><b data-i18n="j1t">Ask for an access code</b><span data-i18n="j1p">Write to us from the Google account you use on your phone. We reply with a code, usually within a day.</span></div></li>
+        <li><div><b data-i18n="j2t">Open the testing link</b><span data-i18n="j2p">Sign in with the same Google account and tap “Become a tester”.</span></div></li>
+        <li><div><b data-i18n="j3t">Install from Google Play</b><span data-i18n="j3p">Follow the “Download it on Google Play” link on that page. Updates arrive like for any other app.</span></div></li>
+      </ol>
+      <div class="ctas">
+        <a class="btn primary" id="code-link" href="mailto:yougosupport@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></svg>
+          <span data-i18n="btnCode">Request an access code</span>
+        </a>
+        <a class="btn ghost" href="https://play.google.com/apps/testing/com.elk.lurkgo" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8 1 .6l15.6-9.2c.4-.3.4-.9 0-1.2L5 2.2c-.5-.2-1 .1-1 .6z"/></svg>
+          <span data-i18n="btnTest">Open the testing link</span>
+        </a>
+      </div>
+      <p class="platform" data-i18n="joinMail">Email doesn't open? Write to <a href="mailto:yougosupport@gmail.com">yougosupport@gmail.com</a> with the subject “LurkGo access code”.</p>
+      <div class="why" data-i18n="why"><b>Why it matters:</b> Google Play opens a new app to everyone only after enough testers have played it for two weeks. Every tester brings the public release closer.</div>
+    </div>
+  </div>
+</section>
+
+<section id="community">
+  <div class="wrap">
+    <p class="kicker" data-i18n="commKicker">Community</p>
+    <h2 data-i18n="commTitle">Help shape LurkGo</h2>
+    <p class="lead" data-i18n="commLead">LurkGo is made by one independent developer in Bavaria. Your shots, ideas and bug reports decide what gets built next.</p>
+    <div class="cards">
+      <div class="card"><h3 data-i18n="k1t">📸 Share your encounters</h3><p data-i18n="k1p">Caught a creature in a great spot? Send us the shot – the best ones will appear here.</p><a href="mailto:yougosupport@gmail.com?subject=LurkGo%20shot" data-i18n="k1a">Send a shot →</a></div>
+      <div class="card"><h3 data-i18n="k2t">💡 Ideas and new worlds</h3><p data-i18n="k2p">Which world, creature or feature should come next? Tell us.</p><a href="mailto:yougosupport@gmail.com?subject=LurkGo%20idea" data-i18n="k2a">Suggest an idea →</a></div>
+      <div class="card"><h3 data-i18n="k3t">🐞 Report a bug</h3><p data-i18n="k3p">Creature in the wrong place or app acting up? Tell us your phone model and what happened.</p><a href="mailto:yougosupport@gmail.com?subject=LurkGo%20bug" data-i18n="k3a">Report a bug →</a></div>
+      <div class="card"><h3><span data-i18n="k4t">🗺️ Gallery and news</span><span class="soon" data-i18n="soon">soon</span></h3><p data-i18n="k4p">A gallery of player shots, release notes and community events will live on this page.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="wrap">
+    <div class="safety">
+      <div class="ico">⚠️</div>
+      <p data-i18n="safety">Play safe: creatures appear only on public footpaths and pavements, the app marks roads in AR and pauses when you run. Always watch traffic and your surroundings, and stop before you look at your phone.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 LurkGo</span>
+    <nav>
+      <a href="privacy.html" data-i18n="fPrivacy">Privacy policy</a>
+      <a href="terms.html" data-i18n="fTerms">Terms of use</a>
+      <a href="mailto:yougosupport@gmail.com">yougosupport@gmail.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var T = {
+    de: {
+      navWorlds: "Welten", navCommunity: "Community", navJoin: "Mitmachen",
+      badge: "Early Access · Android",
+      tagline: "Geh durch deine Straßen und finde Kreaturen, die um die Ecke lauern.",
+      sub: "Ein Augmented-Reality-Spiel zum Spazierengehen. Wähle eine Welt, folge dem Radar und triff ihre Kreaturen an echten Orten in deiner Nähe – direkt durch die Handykamera.",
+      ctaJoin: "Early Access beitreten", ctaWorlds: "Welten ansehen",
+      platform: "Kostenlos · kein Konto · keine Werbung",
+      howKicker: "So funktioniert's", howTitle: "Deine Nachbarschaft ist das Spielfeld",
+      s1t: "Wähle eine Welt", s1p: "Halloween, Fantasy, Anime oder The Other Side. Jede hat eigene Kreaturen, Farben und Musik.",
+      s2t: "Folge dem Radar", s2p: "Die Karte zeigt, wer in der Nähe lauert. Geh zu Fuß hin – im Fahrzeug verstecken sie sich.",
+      s3t: "Triff sie in AR", s3p: "Heb dein Handy und sieh sie auf deiner Straße stehen. Tippe eine Kreatur an, um einen Stern zu sammeln.",
+      s4t: "Gemeinsam jagen", s4p: "Alle in der Nähe sehen dieselben Kreaturen an denselben Orten. Zieh mit Freunden los.",
+      worldsKicker: "Welten", worldsTitle: "Wähle bei jedem Start deine Welt",
+      worldsLead: "Jede Welt färbt das Kamerabild in ihrem eigenen Look und bevölkert deine Straßen mit ihren eigenen Gestalten.",
+      wHalloween: "Goldene Dämmerung, leuchtende Kürbisse, Fledermäuse und ruhelose Geister",
+      nFantasy: "Fantasy", wFantasy: "Ein warmer Märchenherbst mit Elfen, Zwergen, Kobolden und Trollen",
+      nAnime: "Anime", wAnime: "Eine Cel-Shading-Welt mit Helden, Ninjas und niedlichen Wesen",
+      nOtherside: "The Other Side", wOtherside: "Eine kalte blaue Welt unter einem brennend roten Himmel",
+      ownModels: "🧩 Eigene Monster: Lade ein beliebiges herunterladbares 3D-Modell von Sketchfab und triff es an der nächsten Ecke.",
+      shotsKicker: "Von der Straße", shotsTitle: "Echte Straßen, unwirkliche Nachbarn",
+      c1: "Etwas Großes am Ende der Straße", c2: "Das Radar zeigt, wer in der Nähe ist", c3: "Kürbisse auf dem Gehweg", c4: "Vier Welten zur Auswahl", c5: "Ein Friedhof, wo nie einer war", c6: "Wer hat den Kessel hier stehen lassen?",
+      joinKicker: "Early Access", joinTitle: "Mach beim Test auf Google Play mit",
+      joinLead: "LurkGo ist im geschlossenen Test auf Google Play. Tester bekommen jedes Update zuerst und bestimmen mit, was als Nächstes kommt.",
+      j1t: "Zugangscode anfordern", j1p: "Schreib uns von dem Google-Konto, das du auf dem Handy nutzt. Wir antworten mit einem Code, meist innerhalb eines Tages.",
+      j2t: "Testlink öffnen", j2p: "Mit demselben Google-Konto anmelden und auf „Tester werden“ tippen.",
+      j3t: "Über Google Play installieren", j3p: "Folge dort dem Link zu Google Play. Updates kommen wie bei jeder anderen App.",
+      btnCode: "Zugangscode anfordern", btnTest: "Testlink öffnen",
+      joinMail: "E-Mail öffnet sich nicht? Schreib an <a href=\"mailto:yougosupport@gmail.com\">yougosupport@gmail.com</a> mit dem Betreff „LurkGo access code“.",
+      why: "<b>Warum das zählt:</b> Google Play gibt eine neue App erst für alle frei, wenn genug Tester sie zwei Wochen lang gespielt haben. Jeder Tester bringt den öffentlichen Start näher.",
+      commKicker: "Community", commTitle: "Gestalte LurkGo mit",
+      commLead: "LurkGo wird von einem unabhängigen Entwickler in Bayern gemacht. Deine Fotos, Ideen und Fehlerberichte entscheiden, was als Nächstes kommt.",
+      k1t: "📸 Teile deine Begegnungen", k1p: "Eine Kreatur an einem tollen Ort erwischt? Schick uns das Foto – die besten erscheinen hier.", k1a: "Foto senden →",
+      k2t: "💡 Ideen und neue Welten", k2p: "Welche Welt, Kreatur oder Funktion soll als Nächstes kommen? Sag es uns.", k2a: "Idee vorschlagen →",
+      k3t: "🐞 Fehler melden", k3p: "Kreatur am falschen Ort oder die App spinnt? Nenn uns dein Handymodell und was passiert ist.", k3a: "Fehler melden →",
+      k4t: "🗺️ Galerie und News", soon: "bald", k4p: "Eine Galerie mit Spielerfotos, Versionshinweise und Community-Events kommen auf diese Seite.",
+      safety: "Sicher spielen: Kreaturen erscheinen nur auf öffentlichen Fußwegen und Gehsteigen, die App markiert Straßen in AR und pausiert, wenn du rennst. Achte immer auf Verkehr und Umgebung und bleib stehen, bevor du aufs Handy schaust.",
+      fPrivacy: "Datenschutz", fTerms: "Nutzungsbedingungen",
+      mailSubject: "LurkGo access code",
+      mailBody: "Hallo! Ich möchte LurkGo testen.\n\nGoogle-Konto auf meinem Handy: \nHandymodell: \nLand: \n"
+    },
+    ru: {
+      navWorlds: "Миры", navCommunity: "Сообщество", navJoin: "Участвовать",
+      badge: "Ранний доступ · Android",
+      tagline: "Гуляй по своим улицам и находи существ, которые прячутся за углом.",
+      sub: "Игра-прогулка в дополненной реальности. Выбери мир, следуй за радаром и встречай его существ в реальных местах рядом с тобой – прямо через камеру телефона.",
+      ctaJoin: "Получить ранний доступ", ctaWorlds: "Посмотреть миры",
+      platform: "Бесплатно · без аккаунта · без рекламы",
+      howKicker: "Как это работает", howTitle: "Твой район – это игровое поле",
+      s1t: "Выбери мир", s1p: "Хэллоуин, Фэнтези, Аниме или The Other Side. У каждого свои существа, цвета и музыка.",
+      s2t: "Следуй за радаром", s2p: "Карта показывает, кто прячется рядом. Иди к ним пешком – в транспорте они прячутся.",
+      s3t: "Встречай их в AR", s3p: "Подними телефон и увидишь их прямо на своей улице. Нажми на существо, чтобы получить звезду.",
+      s4t: "Охоться вместе", s4p: "Все рядом видят тех же существ в тех же местах. Выходи с друзьями.",
+      worldsKicker: "Миры", worldsTitle: "Выбирай мир при каждом запуске",
+      worldsLead: "Каждый мир перекрашивает изображение с камеры в свой стиль и населяет твои улицы своими персонажами.",
+      wHalloween: "Золотые сумерки, светящиеся тыквы, летучие мыши и беспокойные духи",
+      nFantasy: "Фэнтези", wFantasy: "Тёплая сказочная осень с эльфами, гномами, лепреконами и троллями",
+      nAnime: "Аниме", wAnime: "Мир в стиле cel-shading с героями, ниндзя и милыми зверьками",
+      wOtherside: "Холодный синий мир под пылающим красным небом",
+      ownModels: "🧩 Свои монстры: загрузи любую скачиваемую 3D-модель со Sketchfab и встреть её за ближайшим углом.",
+      shotsKicker: "С улицы", shotsTitle: "Настоящие улицы, ненастоящие соседи",
+      c1: "Что-то высокое в конце улицы", c2: "Радар показывает, кто рядом", c3: "Тыквы на тротуаре", c4: "Четыре мира на выбор", c5: "Кладбище там, где его не было", c6: "Кто оставил здесь котёл?",
+      joinKicker: "Ранний доступ", joinTitle: "Присоединяйся к тестированию в Google Play",
+      joinLead: "LurkGo сейчас в закрытом тестировании в Google Play. Тестеры получают каждое обновление первыми и помогают решить, что будет дальше.",
+      j1t: "Запроси код доступа", j1p: "Напиши нам с Google-аккаунта, который стоит на телефоне. Мы пришлём код, обычно в течение дня.",
+      j2t: "Открой ссылку для тестеров", j2p: "Войди под тем же Google-аккаунтом и нажми «Стать тестировщиком».",
+      j3t: "Установи из Google Play", j3p: "Перейди по ссылке на Google Play с той же страницы. Обновления приходят как у любого приложения.",
+      btnCode: "Запросить код доступа", btnTest: "Ссылка для тестеров",
+      joinMail: "Почта не открывается? Напиши на <a href=\"mailto:yougosupport@gmail.com\">yougosupport@gmail.com</a> с темой «LurkGo access code».",
+      why: "<b>Почему это важно:</b> Google Play открывает новое приложение для всех только после того, как достаточно тестеров поиграли в него две недели. Каждый тестер приближает публичный релиз.",
+      commKicker: "Сообщество", commTitle: "Делай LurkGo вместе с нами",
+      commLead: "LurkGo делает один независимый разработчик из Баварии. Твои снимки, идеи и сообщения об ошибках решают, что появится дальше.",
+      k1t: "📸 Делись встречами", k1p: "Поймал существо в классном месте? Пришли снимок – лучшие появятся здесь.", k1a: "Прислать снимок →",
+      k2t: "💡 Идеи и новые миры", k2p: "Какой мир, существо или функцию сделать следующими? Расскажи.", k2a: "Предложить идею →",
+      k3t: "🐞 Сообщить об ошибке", k3p: "Существо не на месте или приложение капризничает? Напиши модель телефона и что случилось.", k3a: "Сообщить об ошибке →",
+      k4t: "🗺️ Галерея и новости", soon: "скоро", k4p: "Здесь появятся галерея снимков игроков, новости обновлений и события сообщества.",
+      safety: "Играй безопасно: существа появляются только на общественных тротуарах и пешеходных дорожках, приложение отмечает дороги в AR и ставит паузу, когда ты бежишь. Всегда следи за транспортом и окружением и остановись, прежде чем смотреть в телефон.",
+      fPrivacy: "Конфиденциальность", fTerms: "Условия использования",
+      mailSubject: "LurkGo access code",
+      mailBody: "Привет! Хочу протестировать LurkGo.\n\nGoogle-аккаунт на телефоне: \nМодель телефона: \nСтрана: \n"
+    }
+  };
+  var en = { mailSubject: "LurkGo access code", mailBody: "Hi! I'd like to test LurkGo.\n\nGoogle account on my phone: \nPhone model: \nCountry: \n" };
+  var nodes = document.querySelectorAll("[data-i18n]");
+  nodes.forEach(function (n) { en[n.getAttribute("data-i18n")] = n.innerHTML; });
+  T.en = en;
+
+  function apply(lang) {
+    var t = T[lang] || en;
+    nodes.forEach(function (n) { var k = n.getAttribute("data-i18n"); n.innerHTML = t[k] != null ? t[k] : en[k]; });
+    document.documentElement.lang = lang;
+    document.getElementById("code-link").href = "mailto:yougosupport@gmail.com?subject=" +
+      encodeURIComponent(t.mailSubject) + "&body=" + encodeURIComponent(t.mailBody);
+    document.querySelectorAll(".lang button").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-lang") === lang); });
+    try { localStorage.setItem("lurkgo-site-lang", lang); } catch (e) {}
+  }
+  document.querySelectorAll(".lang button").forEach(function (b) {
+    b.addEventListener("click", function () { apply(b.getAttribute("data-lang")); });
+  });
+  var saved = null; try { saved = localStorage.getItem("lurkgo-site-lang"); } catch (e) {}
+  var nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+  if (nav === "uk" || nav === "be") nav = "ru";
+  apply(saved || (T[nav] ? nav : "en"));
+})();
+</script>
+</body>
 </html>
