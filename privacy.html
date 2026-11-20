@@ -32,8 +32,8 @@ what data the app uses, where it goes and what choices you have.</p>
 <p><strong>In short:</strong> LurkGo has no user accounts, no advertising, no analytics and no
 server of its own. The developer does not receive, collect or store any of your personal data.
 Your camera image, location and sensor readings are processed on your phone. To show the map and
-to place creatures safely, the app downloads public map data from OpenStreetMap services, which
-see the approximate area you are in.</p>
+to place creatures safely, the app downloads public map data from OpenStreetMap services and from map data files on this website
+(hosted by GitHub), which see the approximate area you are in.</p>
 
 <h2>1. Who is responsible</h2>
 <p>LurkGo is developed and published by Mikhail Gubko, an individual developer based in Germany.
@@ -93,7 +93,11 @@ that answers it. LurkGo does not send your name, account, device ID or any other
     <td>Requests for map images of the area you are viewing</td>
     <td>Showing the map</td>
     <td><a href="https://osmfoundation.org/wiki/Privacy_Policy">OSMF Privacy Policy</a></td></tr>
-<tr><td>Overpass API servers (overpass-api.de, overpass.kumi.systems, overpass.private.coffee)</td>
+<tr><td>LurkGo map data files on lurkgo.app (hosted by GitHub Pages)</td>
+    <td>Requests for prepared public map data files covering about 1 km around you</td>
+    <td>Placing creatures only on safe, public places such as sidewalks and parks</td>
+    <td><a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">GitHub Privacy Statement</a></td></tr>
+<tr><td>Overpass API servers (overpass-api.de and its servers z. and lz4.overpass-api.de, overpass.kumi.systems, overpass.private.coffee), only outside the area covered by the files above</td>
     <td>A query for public map data (paths, roads, parks) in a box of a few hundred metres around you</td>
     <td>Placing creatures only on safe, public places such as sidewalks and parks</td>
     <td><a href="https://overpass-api.de/">overpass-api.de</a>,
