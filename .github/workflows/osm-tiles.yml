@@ -1,0 +1,52 @@
+name: OSM path tiles
+
+# Builds the static path data the LurkGo app reads from https://lurkgo.app/osm/v1/ (so it does not
+# depend on the public Overpass servers, which rate-limit or refuse phones). Source: Geofabrik's
+# Oberbayern extract (© OpenStreetMap contributors, ODbL). Runs monthly and on demand; the
+# result is committed to main, and GitHub Pages publishes it with the site.
+on:
+  workflow_dispatch:
+    inputs:
+      box:
+        description: 'Covered area: south west north east (degrees)'
+        default: '48.05 11.10 48.30 11.70'
+  schedule:
+    - cron: '17 3 1 * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: osm-tiles
+  cancel-in-progress: false
+
+jobs:
+  tiles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pyosmium
+        run: pip install osmium
+      - name: Download extract
+        run: curl -fsSL -A 'LurkGo tiles (+https://lurkgo.app)' -o extract.osm.pbf https://download.geofabrik.de/europe/germany/bayern/oberbayern-latest.osm.pbf
+      - name: Cut tiles
+        env:
+          BOX: ${{ inputs.box || '48.05 11.10 48.30 11.70' }}
+        run: |
+          python tools/osm_tiles.py extract.osm.pbf osm/v1 $BOX
+          du -sh osm/v1
+          size=$(du -sm osm/v1 | cut -f1)
+          if [ "$size" -gt 600 ]; then echo "tiles too big for Pages: ${size} MB"; exit 1; fi
+      - name: Commit
+        run: |
+          rm -f extract.osm.pbf
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A osm
+          git diff --cached --quiet && { echo 'no changes'; exit 0; }
+          git commit -q -m "OSM path tiles $(date -u +%F)"
+          git push
